@@ -7,6 +7,10 @@ class Recipe
     recipes
   end
 
+  def all_with_id
+    recipes.map.with_index(1) { |recipe, i| "#{i}: #{recipe}" }
+  end
+
   private
 
   def recipes
@@ -22,4 +26,5 @@ class Recipe
   end
 end
 
-puts Recipe.new.all
+# puts Recipe.new.all
+puts Recipe.new.all_with_id
