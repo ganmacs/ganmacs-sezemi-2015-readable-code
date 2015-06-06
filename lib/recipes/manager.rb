@@ -13,10 +13,20 @@ module Recipes
     def all_items_with_id
       formatted_recipes = recipes.map { |recipe| "#{recipe.id}: #{recipe.name}" }
 
-      has_recipe_id? ? formatted_recipes[recipe_id] : formatted_recipes
+      all_recipes_or_specific_recipe(formatted_recipes)
+    end
+
+    def all_items_with_id_and_url
+      formatted_recipes = recipes.map { |recipe| "#{recipe.id}: #{recipe.name} #{recipe.url}" }
+
+      all_recipes_or_specific_recipe(formatted_recipes)
     end
 
     private
+
+    def all_recipes_or_specific_recipe(recipes)
+      has_recipe_id? ? recipes[recipe_id] : recipes
+    end
 
     def recipes
       @recipes ||= load_recipe

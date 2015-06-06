@@ -4,5 +4,4 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'recipes'
 
 recipe_manager = Recipes::Manager.new
-# puts recipe_manager.all_items
-puts recipe_manager.all_items_with_id
+puts recipe_manager.all_items_with_id_and_url
