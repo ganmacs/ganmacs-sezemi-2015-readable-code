@@ -18,11 +18,15 @@ class Recipe
   end
 
   def load_recipe_file
-    YAML.load_file(recipe_file_path)
+    YAML.load_file(recipe_file_path) if exist_recipe_file?
+  end
+
+  def exist_recipe_file?
+    File.exist?(recipe_file_path) or raise "#{recipe_file_path} does not exist."
   end
 
   def recipe_file_path
-    ARGV[0] || DEFALUT_FILE_PATH
+    @recipe_file_path ||= (ARGV[0] || DEFALUT_FILE_PATH)
   end
 end
 
