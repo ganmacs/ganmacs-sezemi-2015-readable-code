@@ -11,13 +11,19 @@ module Recipes
     end
 
     def all_items_with_id
-      recipes.map { |recipe| "#{recipe.id}: #{recipe.name}" }
+      formatted_recipes = recipes.map { |recipe| "#{recipe.id}: #{recipe.name}" }
+
+      has_recipe_id? ? formatted_recipes[recipe_id] : formatted_recipes
     end
 
     private
 
     def recipes
       @recipes ||= load_recipe
+    end
+
+    def recipe_size
+      recipes.size
     end
 
     def load_recipe
@@ -47,6 +53,21 @@ module Recipes
 
     def recipe_file_path
       @recipe_file_path ||= (ARGV[0] || DEFALUT_FILE_PATH)
+    end
+
+    def valid_recipe_id?
+      has_recipe_id? && (ARGV[1].to_i > 0 && ARGV[1].to_i <= recipe_size)
+    end
+
+    def has_recipe_id?
+      !!ARGV[1]
+    end
+
+    def recipe_id
+      @recipe_id ||= begin
+        raise "#{ARGV[1]} is not valid id" unless valid_recipe_id?
+        ARGV[1].to_i - 1
+      end
     end
   end
 end
