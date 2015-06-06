@@ -12,7 +12,7 @@ $ ruby lib/spec1.rb
 ### spec3
 
 ```
-$ ruby lib/recipe.rb src/recipes.yml
+$ ruby bin/recipe src/recipes.yml
 ```
 
 ### spec5
