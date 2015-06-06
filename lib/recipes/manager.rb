@@ -28,8 +28,8 @@ module Recipes
 
     def load_recipe
       load_recipe_file.map.with_index(1) do |recipe, i|
-        recipe_properties = Array(recipe.split(' '))
-        Recipes::Item.new(i, *recipe_properties)
+        recipe_attributes = recipe.merge(id: i)
+        Recipes::Item.new(recipe_attributes)
       end
     end
 
