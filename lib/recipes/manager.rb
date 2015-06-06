@@ -11,6 +11,7 @@ module Recipes
     end
 
     def all_items_with_id
+      recipes.map { |recipe| "#{recipe.id}: #{recipe.name}" }
     end
 
     private

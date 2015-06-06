@@ -18,7 +18,7 @@ $ ruby bin/recipe src/recipes.yml
 ### spec5
 
 ```
-$ ruby lib/recipe.rb src/recipes.yml
+$ ruby bin/recipe src/recipes.yml
 ```
 
 #### recipe format
