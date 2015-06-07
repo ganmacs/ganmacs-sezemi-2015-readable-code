@@ -21,6 +21,12 @@ $ ruby bin/recipe src/recipes.yml
 $ ruby bin/recipe src/recipes.yml
 ```
 
+### spec8
+
+```
+$ ruby kou bin/recipe src/recipes.yml 2
+```
+
 #### recipe format
 
 * use `.yaml` or `.yml`
