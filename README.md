@@ -38,6 +38,12 @@ $ ruby bin/recipe kou src/recipe1.yml piro src/recipe2.yml okkez src/recipe3.yml
 ```
 $ ruby bin/recipe kou src/recipe1.yml piro src/recipe2.yml okkez src/recipe3.yml kou src/recipe4.yml 1 2
 ```
+
+### spec13
+
+```
+$ ruby bin/recipe_csv kou src/recipe1.yml piro src/recipe2.yml okkez src/recipe3.yml kou src/recipe4.yml 
+```
  
 #### recipe format
 
