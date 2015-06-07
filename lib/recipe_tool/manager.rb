@@ -8,18 +8,18 @@ module RecipeTool
     VALID_EXTNAME = %w(.yaml .yml).freeze
 
     # deprecate
-    def all_items
+    def all_recipes
       recipes.map(&:name)
     end
 
     # deprecate
-    def all_items_with_id
+    def all_recipes_with_id
       formatted_recipes = recipes.map { |recipe| "#{recipe.id}: #{recipe.name}" }
 
       all_recipes_or_specific_recipe(formatted_recipes)
     end
 
-    def all_items_with_id_and_url
+    def all_recipes_with_id_and_url
       formatted_recipes = recipes.map do |recipe_list|
         recipe_list.map { |recipe| "#{recipe.id}: #{recipe.name} #{recipe.url}" }
       end
