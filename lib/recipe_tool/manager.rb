@@ -1,5 +1,6 @@
 require 'yaml'
 require 'recipe_tool/recipe'
+require 'recipe_tool/user'
 require 'recipe_tool/parser'
 require 'recipe_tool/recipes_loader'
 
@@ -18,18 +19,24 @@ module RecipeTool
     end
 
     def all_recipes_with_user
-      if has_recipe_id?
+      if has_recipe_or_user_id?
         recipes_with_user.each do |recipe_with_user|
-          recipe = recipe_with_user[:recipes].find { |r| r.id == recipe_id }
-          if recipe
-            recipe_with_user[:recipes] = Array(recipe)
+          if ARGV.size > 3
+            if has_recipe_id?
+              recipe = recipe_with_user[:recipes].find { |r| r.id == recipe_id }
+              recipe_with_user.update(recipes: Array(recipe))
+            end
+
+            unless recipe_with_user[:user].id == user_id
+              recipe_with_user.update(user_hidden: true)
+            end
           else
-            recipe_with_user[:recipes] = []
+            recipe = recipe_with_user[:recipes].find { |r| r.id == recipe_id }
+            recipe_with_user.update(recipes: Array(recipe))
           end
         end
-      else
-        recipes_with_user
       end
+      recipes_with_user
     end
 
     private
@@ -40,8 +47,10 @@ module RecipeTool
 
     def recipes_with_user
       @recipes_with_user ||= recipes_list.map.with_index do |recipes, i|
-        { user_name: (user_names && user_names[i]),
-          recipes: recipes }
+        { user: RecipeTool::User.new(user_names && user_names[i], i + 1),
+          user_hidden: false,
+          recipes: recipes
+        }
       end
     end
 
@@ -87,9 +96,17 @@ module RecipeTool
 
     def recipe_id
       @recipe_id ||= begin
-        raise "#{args[:recipe_id]} is not a valid id" unless valid_recipe_id?
-        args[:recipe_id]
-      end
+                       raise "#{args[:recipe_id]} is not a valid id" unless valid_recipe_id?
+                       args[:recipe_id]
+                     end
+    end
+
+    def has_user_id?
+      !!args[:user_id]
+    end
+
+    def user_id
+      @user_id ||= args[:user_id]
     end
 
     def has_user_names?
@@ -101,7 +118,11 @@ module RecipeTool
     end
 
     def args
-      @args ||= RecipeTool::Parser.new.args
+      @args ||= RecipeTool::Parser.new.call
+    end
+
+    def has_recipe_or_user_id?
+      has_user_id? || has_recipe_id?
     end
 
     def recipes_loader

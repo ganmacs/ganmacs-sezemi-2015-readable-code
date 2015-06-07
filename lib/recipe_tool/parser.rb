@@ -1,12 +1,15 @@
 module RecipeTool
   # recipe args parser
+
+  attr_reader :size
+
   class Parser
     def initialize(args = ARGV)
       @args = args
       @size = args.size
     end
 
-    def args
+    def call
       case @size
       when 0                    # not recieve args
         not_recieve_args
@@ -57,11 +60,19 @@ module RecipeTool
     end
 
     def parse_more_args
-      if has_recipe_id?
+      case
+      when has_recipe_and_user_id?
         {
           recipe_paths: parse_multi_recipe_and_user[:recipe_paths],
           recipe_id: @args.last.to_i,
-          user_names: parse_multi_recipe_and_user[:user_names]
+          user_names: parse_multi_recipe_and_user[:user_names],
+          user_id: @args[-2].to_i
+        }
+      when has_user_id?
+        {
+          recipe_paths: parse_multi_recipe_and_user[:recipe_paths],
+          user_names: parse_multi_recipe_and_user[:user_names],
+          user_id: @args.last.to_i
         }
       else
         {
@@ -75,7 +86,6 @@ module RecipeTool
       h = { user_names: [],
             recipe_paths: [] }
 
-      args = has_recipe_id? ? @args[0..-2] : @args
       args
         .each_slice(2)
         .each_with_object(h) do |(user_name, recipe_path), hash|
@@ -84,6 +94,30 @@ module RecipeTool
       end
     end
 
+    def args
+      case
+      when has_recipe_and_user_id?
+        @args[0..-3]
+      when has_user_id?
+        @args[0..-2]
+      else
+        @args
+      end
+    end
+
+    def has_recipe_and_user_id?
+      !!Integer(@args[-2]) && !!Integer(@args[-1])
+    rescue ArgumentError        # not a number
+      false
+    end
+
+    def has_user_id?
+      !!Integer(@args.last)
+    rescue ArgumentError        # not a number
+      false
+    end
+
+    # call when two args
     def has_recipe_id?
       !!Integer(@args.last)
     rescue ArgumentError        # not a number
