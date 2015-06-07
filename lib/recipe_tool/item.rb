@@ -1,5 +1,5 @@
-module Recipes
-  class Item
+module RecipeTool
+  class Recipe
     attr_reader :id, :name, :url
 
     def initialize(id: nil, name: '', url: nil)

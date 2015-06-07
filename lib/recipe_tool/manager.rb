@@ -1,16 +1,18 @@
 require 'yaml'
-require 'recipes/item'
-require 'recipes/parser'
+require 'recipe_tool/item'
+require 'recipe_tool/parser'
 
-module Recipes
+module RecipeTool
   class Manager
     DEFALUT_FILE_PATHS = ['src/recipes.yml'].freeze
     VALID_EXTNAME = %w(.yaml .yml).freeze
 
+    # deprecate
     def all_items
       recipes.map(&:name)
     end
 
+    # deprecate
     def all_items_with_id
       formatted_recipes = recipes.map { |recipe| "#{recipe.id}: #{recipe.name}" }
 
@@ -18,13 +20,23 @@ module Recipes
     end
 
     def all_items_with_id_and_url
-      formatted_recipes = recipes.map do |recipe|
-        "#{recipe.id}: #{recipe.name} #{recipe.url}"
+      formatted_recipes = recipes.map do |recipe_list|
+        recipe_list.map { |recipe| "#{recipe.id}: #{recipe.name} #{recipe.url}" }
       end
 
-      puts "ユーザ名: #{user_names.first}" if user_names
+      f = formatted_recipes.map.with_index do |r, i|
+        if has_user_names? && user_names[i]
+          ["ユーザ名: #{user_names[i]}"] + r
+        else
+          r
+        end
+      end
+      #                     .map do |recipe|
+      #   "#{recipe.id}: #{recipe.name} #{recipe.url}"
+      # end
 
-      all_recipes_or_specific_recipe(formatted_recipes)
+      # puts "ユーザ名: #{user_names.first}" if user_names
+      # all_recipes_or_specific_recipe(formatted_recipes)
     end
 
     private
@@ -41,10 +53,16 @@ module Recipes
       recipes.size
     end
 
+    # @return [Array<Array<Recipes::Item>>]
+    # e.g [[Recipes::Item, Recipes::Item], [Recipes::Item, Recipes::Item]]
     def load_recipes
-      load_recipe_files.flatten.map.with_index(1) do |recipe, i|
-        recipe_attributes = recipe.merge(id: i)
-        Recipes::Item.new(recipe_attributes)
+      i = 1
+      load_recipe_files.map do |recipe_file|
+        recipe_file.map do |recipe|
+          recipe_attributes = recipe.merge(id: i)
+          i += 1
+          RecipeTool::Recipe.new(recipe_attributes)
+        end
       end
     end
 
@@ -56,7 +74,7 @@ module Recipes
     def check_recipe_files_valid
       recipe_file_paths.each do |recipe_file_path|
         @recipe_file_path = recipe_file_path
-        raise "#{recipe_file_path} is a invalid file" unless valid_recipe_file?
+        raise "#{recipe_file_path} is an invalid file" unless valid_recipe_file?
       end
     end
 
@@ -87,13 +105,13 @@ module Recipes
 
     def recipe_id
       @recipe_id ||= begin
-        raise "#{ARGV[1]} is not valid id" unless valid_recipe_id?
-        args[:recipe_id] - 1 # index is start by 1
-      end
+                       raise "#{ARGV[1]} is not valid id" unless valid_recipe_id?
+                       args[:recipe_id] - 1 # index is start by 1
+                     end
     end
 
     def has_user_names?
-      !!args[:user_names]
+      !args[:user_names].empty?
     end
 
     def user_names
@@ -101,7 +119,7 @@ module Recipes
     end
 
     def args
-      @args ||= Recipes::Parser.new.args
+      @args ||= Parser.new.args
     end
   end
 end
