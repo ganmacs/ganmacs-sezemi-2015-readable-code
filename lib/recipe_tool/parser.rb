@@ -8,6 +8,8 @@ module RecipeTool
 
     def args
       case @size
+      when 0                    # not recieve args
+        not_recieve_args
       when 1                    # recieve <recipe_path>
         parse_one_args
       when 2                    # recieve <recipe_path> <recipe_id> or <user_name> <recipe_path>
@@ -20,6 +22,11 @@ module RecipeTool
     end
 
     private
+
+    def not_recieve_args
+      puts 'Usage: recipe [<recipe_user>] <recipe_file_path> [<recipe_id>]'
+      exit(1)
+    end
 
     def parse_one_args
       {
@@ -53,12 +60,12 @@ module RecipeTool
       if has_recipe_id?
         {
           recipe_paths: parse_multi_recipe_and_user[:recipe_paths],
+          recipe_id: @args.last.to_i,
           user_names: parse_multi_recipe_and_user[:user_names]
         }
       else
         {
           recipe_paths: parse_multi_recipe_and_user[:recipe_paths],
-          recipe_id: @args.last,
           user_names: parse_multi_recipe_and_user[:user_names]
         }
       end
