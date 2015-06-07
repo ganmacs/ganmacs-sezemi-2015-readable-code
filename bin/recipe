@@ -3,5 +3,5 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'recipe_tool'
 
-recipe_manager = RecipeTool::Manager.new
-puts recipe_manager.all_recipes_with_id_and_url
+recipe_printer = RecipeTool::Printer.new
+recipe_printer.call

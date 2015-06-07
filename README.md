@@ -24,9 +24,15 @@ $ ruby bin/recipe src/recipes.yml
 ### spec8
 
 ```
-$ ruby kou bin/recipe src/recipes.yml 2
+$ ruby bin/recipe kou src/recipes.yml 2
 ```
 
+### spec9
+
+```
+$ ruby bin/recipe kou src/recipe1.yml piro src/recipe2.yml okkez src/recipe3.yml kou src/recipe4.yml
+```
+ 
 #### recipe format
 
 * use `.yaml` or `.yml`

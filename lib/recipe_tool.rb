@@ -1,4 +1,4 @@
-require 'recipe_tool/manager'
+require 'recipe_tool/printer'
 
 module RecipeTool
 end
