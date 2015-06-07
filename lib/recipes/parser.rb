@@ -8,11 +8,11 @@ module Recipes
 
     def args
       case @size
-      when 1                    # recive <recipe_path>
+      when 1                    # recieve <recipe_path>
         parse_one_args
-      when 2                    # recive <recipe_path> <recipe_id> or <user_name> <recipe_path>
+      when 2                    # recieve <recipe_path> <recipe_id> or <user_name> <recipe_path>
         parse_two_args
-      when 3                    # recive <user_name> <recipe_path> <recipe_id>
+      when 3                    # recieve <user_name> <recipe_path> <recipe_id>
         parse_three_args
       end
     end
