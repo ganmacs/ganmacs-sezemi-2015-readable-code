@@ -1,7 +1,7 @@
 require 'yaml'
 require 'recipe_tool/recipe'
 require 'recipe_tool/user'
-require 'recipe_tool/parser'
+require 'recipe_tool/arguments'
 require 'recipe_tool/recipes_loader'
 
 module RecipeTool
@@ -118,7 +118,7 @@ module RecipeTool
     end
 
     def args
-      @args ||= RecipeTool::Parser.new.call
+      @args ||= RecipeTool::Arguments.new.call
     end
 
     def has_recipe_or_user_id?

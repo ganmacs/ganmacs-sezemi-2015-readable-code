@@ -1,6 +1,6 @@
-require 'recipe_tool/parser'
+require 'recipe_tool/arguments'
 
-describe RecipeTool::Parser do
+describe RecipeTool::Arguments do
   let(:args) { described_class.new(arvg).call }
   let(:path) { 'your/file/path.txt' }
 

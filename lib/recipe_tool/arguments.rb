@@ -3,7 +3,7 @@ module RecipeTool
 
   attr_reader :size
 
-  class Parser
+  class Arguments
     def initialize(args = ARGV)
       @args = args
       @size = args.size
